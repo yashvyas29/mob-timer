@@ -25,7 +25,10 @@ function onTimerEvent(event, data) {
   }
 }
 
-ipc.on('timerWindowReady', () => timerState.initialize())
+ipc.on('timerWindowReady', () => {
+  timerState.initialize()
+  timerState.startRemaining()
+})
 ipc.on('configWindowReady', () => timerState.publishConfig())
 ipc.on('fullscreenWindowReady', () => {
   timerState.stopAlerts()
@@ -40,6 +43,7 @@ ipc.on('startTurn', () => {
   windows.closeFullscreenWindow()
   timerState.start()
 })
+ipc.on('close', () => windows.closeFullscreenWindow())
 ipc.on('configure', () => {
   windows.closeFullscreenWindow()
   windows.showConfigWindow()

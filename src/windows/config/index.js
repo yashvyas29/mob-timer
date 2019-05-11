@@ -86,7 +86,7 @@ ipc.on('configUpdated', (event, data) => {
 
   alertAudioCheckbox.checked = data.alertSoundTimes.length > 0
   replayAlertAudioCheckbox.checked = data.alertSoundTimes.length > 1
-  replayAudioAfterSeconds.value = data.alertSoundTimes.length > 1 ? data.alertSoundTimes[1] : 30
+  replayAudioAfterSeconds.value = data.alertSoundTimes.length > 1 ? data.alertSoundTimes[1] : 15
   updateAlertControls()
 
   useCustomSoundCheckbox.checked = !!data.alertSound

@@ -108,6 +108,11 @@ exports.dispatchEvent = (event, data) => {
   if (event === 'alert' && data === secondsUntilFullscreen) {
     exports.createFullscreenWindow()
   }
+  if (event === 'initialized' || event === 'timerChange') {
+    if (tray) {
+      tray.setTitle(data.timeRemaining)
+    }
+  }
   if (isMac) {
     if (event === 'started' || event === 'paused' || event === 'turnEnded') {
       const menu = Menu.getApplicationMenu()

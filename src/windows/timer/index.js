@@ -4,6 +4,7 @@ const ipc = require('electron').ipcRenderer
 
 const containerEl = document.getElementById('container')
 const toggleBtn = document.getElementById('toggleButton')
+const remainingEl = document.getElementById('remaining')
 const configureBtn = document.getElementById('configureButton')
 const currentEl = document.getElementById('current')
 const nextEl = document.getElementById('next')
@@ -20,12 +21,21 @@ let alertSoundTimes = []
 
 ipc.on('timerChange', (event, data) => {
   clearCanvas()
+  drawTimeRemaining(data.timeRemaining)
   drawTimerCircle()
   drawTimerArc(data.secondsRemaining, data.secondsPerTurn)
 })
 
 function clearCanvas() {
   context.clearRect(0, 0, timerCanvas.width, timerCanvas.height)
+}
+
+function drawTimeRemaining(timeRemaining) {
+  if (timeRemaining) {
+    remainingEl.innerHTML = timeRemaining
+  } else {
+    remainingEl.innerHTML = ''
+  }
 }
 
 function drawTimerCircle() {
@@ -67,6 +77,7 @@ function drawMobbers(data) {
   }
   currentPicEl.src = data.current.image || '../img/sad-cyclops.png'
   currentEl.innerHTML = data.current.name
+  drawTimeRemaining(data.timeRemaining)
 
   if (!data.next) {
     data.next = data.current
@@ -91,6 +102,17 @@ function drawOverlays(isPaused) {
     toggleBtn.classList.remove('pause')
   }
 }
+
+ipc.on('initialized', (event, data) => {
+  drawMobbers(data)
+  const isTimeRemaining = data.isTimeRemaining || false
+  if (!isTimeRemaining) {
+    drawInitialState()
+  } else {
+    const isTimerRunning = data.isTimerRunning || false
+    drawOverlays(!isTimerRunning)
+  }
+})
 
 ipc.on('rotated', (event, data) => {
   drawMobbers(data)

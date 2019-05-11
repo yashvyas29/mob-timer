@@ -3,12 +3,13 @@ const ipc = require('electron').ipcRenderer
 const skipBtn = document.getElementById('skip')
 const startTurnBtn = document.getElementById('startTurn')
 const configureBtn = document.getElementById('configure')
+const closeBtn = document.getElementById('close')
 const currentEl = document.getElementById('current')
 const currentPicEl = document.getElementById('currentPic')
 const nextEl = document.getElementById('next')
 const nextPicEl = document.getElementById('nextPic')
 
-ipc.on('rotated', (event, data) => {
+ipc.on('initialized', (event, data) => {
   if (!data.current) {
     data.current = { name: 'Add a mobber' }
   }
@@ -25,5 +26,6 @@ ipc.on('rotated', (event, data) => {
 skipBtn.addEventListener('click', () => ipc.send('skip'))
 startTurnBtn.addEventListener('click', () => ipc.send('startTurn'))
 configureBtn.addEventListener('click', () => ipc.send('configure'))
+closeBtn.addEventListener('click', () => ipc.send('close'))
 
 ipc.send('fullscreenWindowReady')
